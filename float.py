@@ -17,7 +17,7 @@ def int2bin(num):
 		codifica=str(resto)+codifica
 		num=num//2
 	return(codifica)
-	
+
 def dec2bin(dec):
 	codifica="0."
 	while (dec!=0 and len(codifica)<25):
@@ -26,15 +26,15 @@ def dec2bin(dec):
 		codifica=codifica+str(parteIntera)
 	return (codifica)
 
-def normalizza(numBinario):
-	posVirgola=numBinario.index(".")
-	posPrimo1=numBinario.index("1")
+def normalizza(numBin):
+	posVirgola=numBin.index(".")
+	posPrimo1=numBin.index("1")
 
 	if posPrimo1<posVirgola:    #111.000011
-		numBinNorm="1." + numBinario[1:posVirgola]+numBinario[posVirgola+1:]
+		numBinNorm="1." + numBin[1:posVirgola]+numBin[posVirgola+1:]
 		esp=posPrimo1-posVirgola-1
 	else:                       #0.000001111
-		numBinNorm="1." + numBinario[posPrimo1+1:]
+		numBinNorm="1." + numBin[posPrimo1+1:]
 		esp=posPrimo1-posVirgola
 	return(numBinNorm,esp)
 
@@ -55,14 +55,10 @@ def riempiEsponente(esponente):
 numInserito=input("Inserisci il numero: ")
 segno,num=calcolaSegno(numInserito)
 parteInt,parteDec=getIntDec(num)
-print(parteInt,parteDec)
 numerointerobinario=int2bin(parteInt)
+numBinario=int2bin(parteInt)+dec2bin(parteDec)[1:]
+numBinNorm,esp=normalizza(numBinario)
+numBinNorm=riempiMantissa(numBinNorm)
+esponente=riempiEsponente(int2bin(127+esp))
 
-print(f"{parteInt} in binario vale {numerointerobinario}")
-
-#numBinario=int2bin(parteInt)+dec2bin(parteDec)[1:]
-#numBinNorm,esp=normalizza(numBinario)
-#numBinNorm=riempiMantissa(numBinNorm)
-#esponente=riempiEsponente(int2bin(127+esp))
- 
-#print(f"La codifica in floatingPoint di {numInserito} è {segno} {esponente} {numBinNorm[2:]}")
+print(f"La codifica in floatingPoint di {numInserito} è {segno} {esponente} {numBinNorm[2:]}")
