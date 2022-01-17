@@ -20,9 +20,9 @@ def int2bin(num):
 
 def dec2bin(dec):
 	codifica="0."
-	while (dec!=0 and len(codifica)<25):
+	while (dec!=0 and len(codifica)<100):
 		n=dec*2
-		parteIntera,dec=getIntDec(str(n))
+		parteIntera,dec=getIntDec(format(n,'.100f'))
 		codifica=codifica+str(parteIntera)
 	return (codifica)
 
@@ -30,19 +30,19 @@ def normalizza(numBin):
 	posVirgola=numBin.index(".")
 	posPrimo1=numBin.index("1")
 
-	if posPrimo1<posVirgola:    #111.000011
-		numBinNorm="1." + numBin[1:posVirgola]+numBin[posVirgola+1:]
-		esp=posPrimo1-posVirgola-1
-	else:                       #0.000001111
+	if posPrimo1<posVirgola:    #111.000011 -> esp=3-0-1=2
+		numBinNorm="1." + numBin[1:posVirgola] + numBin[posVirgola+1:]
+		esp=posVirgola-posPrimo1-1
+	else:                       #0.000001111 -> esp=1-7=6
 		numBinNorm="1." + numBin[posPrimo1+1:]
-		esp=posPrimo1-posVirgola
+		esp=posVirgola-posPrimo1
 	return(numBinNorm,esp)
 
 def riempiMantissa(num):
-	if len(num)>25:
-		return(num[0:26])
+	if len(num)>23:
+		return(num[0:24])
 
-	while(len(num)<25):
+	while(len(num)<23):
 		num=num+"0"
 	return(num)
 
@@ -59,6 +59,9 @@ numerointerobinario=int2bin(parteInt)
 numBinario=int2bin(parteInt)+dec2bin(parteDec)[1:]
 numBinNorm,esp=normalizza(numBinario)
 numBinNorm=riempiMantissa(numBinNorm)
-esponente=riempiEsponente(int2bin(127+esp))
+esp=esp+127
+espBin=int2bin(esp)
+print(espBin)
+esponente=riempiEsponente(espBin)
 
 print(f"La codifica in floatingPoint di {numInserito} è {segno} {esponente} {numBinNorm[2:]}")
